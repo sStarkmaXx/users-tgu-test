@@ -1,4 +1,4 @@
-import UserCard from '../../components/Card';
+import UserCard from '../../components/card/Card';
 import { users as us } from '../../store/users';
 import './MainPage.css';
 import { UserType } from '../../store/users';
@@ -7,13 +7,17 @@ import { v1 } from 'uuid';
 import { Button, ButtonGroup } from 'react-bootstrap';
 import { useState } from 'react';
 import ModalWindow from '../modal/ModalWindow';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const MainPage = () => {
   const [modalShow, setModalShow] = useState(false);
+  const allUsers = useSelector<RootState, UserType[]>(
+    (state) => state.users.allUsers
+  );
+  // const sortedUsers = sortByDate(allUsers);
 
-  const sortedUsers = sortByDate(us);
-
-  const users = sortedUsers.map((user: UserType) => {
+  const users = allUsers.map((user: UserType) => {
     return <UserCard key={v1()} user={user} />;
   });
 
