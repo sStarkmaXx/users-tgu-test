@@ -14,9 +14,6 @@ const Header = () => {
             <LinkContainer to="/">
               <Nav.Link>MainPage</Nav.Link>
             </LinkContainer>
-            <LinkContainer to="/id">
-              <Nav.Link>user</Nav.Link>
-            </LinkContainer>
           </Nav>
         </Navbar.Collapse>
       </Container>

@@ -1,6 +1,6 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import MainPage from './pages/MainPage';
+import MainPage from './pages/MainPage/MainPage';
 import UserPage from './pages/UserPage';
 import { Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
@@ -11,7 +11,7 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route path="/id" element={<UserPage />} />
+        <Route path="/:id" element={<UserPage />} />
       </Routes>
     </div>
   );
