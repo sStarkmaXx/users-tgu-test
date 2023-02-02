@@ -4,7 +4,7 @@ import { UserType } from '../../store/users';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import './Card.css';
+import './UserCard.css';
 import { usersActions } from '../../store/user.slice';
 
 type UsreCardPropsType = {
@@ -29,6 +29,10 @@ const UserCard: React.FC<UsreCardPropsType> = ({ user }) => {
     isSelected = false;
   }
 
+  const onOpenHandler = (user: UserType) => {
+    dispatch(usersActions.openUser(user));
+  };
+
   return (
     <Card
       style={{ width: '300px' }}
@@ -44,7 +48,15 @@ const UserCard: React.FC<UsreCardPropsType> = ({ user }) => {
         }`}</Card.Title>
         <Card.Text>{new Date(user.createDate).toLocaleString()}</Card.Text>
         <LinkContainer to={`/${user.id}`}>
-          <Button variant="primary">View profile</Button>
+          <Button
+            variant="primary"
+            onClick={(e) => {
+              e.stopPropagation();
+              onOpenHandler(user);
+            }}
+          >
+            View profile
+          </Button>
         </LinkContainer>
       </Card.Body>
     </Card>

@@ -2,7 +2,7 @@ import Modal from 'react-bootstrap/Modal';
 import CreateUserForm from '../../widgets/createUserForm/CreateUserForm';
 import UsersList from '../../widgets/usersList/UsersList';
 
-export type ModalType = 'del' | 'create';
+export type ModalType = 'del' | 'create' | 'edit';
 
 type ModalWindowPropsType = {
   show: boolean;
@@ -25,7 +25,7 @@ const ModalWindow: React.FC<ModalWindowPropsType> = (props) => {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {props.modalType === 'create' && (
+        {(props.modalType === 'create' || props.modalType === 'edit') && (
           <CreateUserForm closeModalWindow={props.onHide} />
         )}
         {props.modalType === 'del' && <UsersList />}

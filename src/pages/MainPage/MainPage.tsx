@@ -1,4 +1,4 @@
-import UserCard from '../../components/card/Card';
+import UserCard from '../../components/card/UserCard';
 import './MainPage.css';
 import { UserType } from '../../store/users';
 import { sortByDate } from '../../shared/libs';

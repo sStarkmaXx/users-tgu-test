@@ -5,6 +5,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 export type UsersState = {
   allUsers: UserType[];
   selectedUsers: UserType[];
+  openedUser?: UserType;
 };
 
 const initialState: UsersState = {
@@ -16,6 +17,9 @@ export const usersSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {
+    openUser(state, action: PayloadAction<UserType>) {
+      state.openedUser = action.payload;
+    },
     selectUser(state, action: PayloadAction<UserType>) {
       const selectedUser = state.selectedUsers.find(
         (user) => user.id === action.payload.id
@@ -34,8 +38,14 @@ export const usersSlice = createSlice({
         id: new Date().getMilliseconds(),
         createDate: new Date().toISOString(),
       };
-      console.log(newUser);
       state.allUsers.push(newUser);
+    },
+    editUser(state, action: PayloadAction<UserType>) {
+      const editUserIndex = state.allUsers.findIndex(
+        (user) => user.id === action.payload.id
+      );
+      state.allUsers[editUserIndex] = action.payload;
+      state.openedUser = action.payload;
     },
     delUser(state, action: PayloadAction<UserType>) {
       if (state.selectedUsers.length) {
@@ -45,6 +55,7 @@ export const usersSlice = createSlice({
         state.selectedUsers = state.selectedUsers.filter(
           (user) => user.id !== action.payload.id
         );
+        state.openedUser = undefined;
       }
     },
   },

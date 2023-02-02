@@ -27,6 +27,9 @@ const CreateUserForm: React.FC<CreateUserFormPropsType> = ({
   const allUsers = useSelector<RootState, UserType[]>(
     (state) => state.users.allUsers
   );
+  const openedUser = useSelector<RootState, UserType | undefined>(
+    (state) => state.users.openedUser
+  );
 
   const schema = yup.object().shape({
     avatar: yup.string(),
@@ -45,7 +48,7 @@ const CreateUserForm: React.FC<CreateUserFormPropsType> = ({
     about: yup.string(),
   });
 
-  const initialValues: InitialValuesType = {
+  const initialValues: InitialValuesType = openedUser || {
     avatar: '',
     firstName: '',
     lastName: '',
@@ -68,15 +71,21 @@ const CreateUserForm: React.FC<CreateUserFormPropsType> = ({
 
   const onSubmit = (values: InitialValuesType) => {
     console.log(values);
-    const noUnique = allUsers.find((user) => user.email === values.email);
-    if (noUnique) {
-      setError('email', {
-        message: 'User with this email is already registered',
-      });
-    } else {
-      dispatch(usersActions.createNewUser(values));
-      reset();
+    if (openedUser) {
+      const editedUser: UserType = { ...openedUser, ...values };
+      dispatch(usersActions.editUser(editedUser));
       closeModalWindow();
+    } else {
+      const noUnique = allUsers.find((user) => user.email === values.email);
+      if (noUnique) {
+        setError('email', {
+          message: 'User with this email is already registered',
+        });
+      } else {
+        dispatch(usersActions.createNewUser(values));
+        reset();
+        closeModalWindow();
+      }
     }
   };
 
