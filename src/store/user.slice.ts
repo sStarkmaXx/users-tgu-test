@@ -37,13 +37,14 @@ export const usersSlice = createSlice({
       console.log(newUser);
       state.allUsers.push(newUser);
     },
-    delUser(state, action: PayloadAction<UserType[]>) {
+    delUser(state, action: PayloadAction<UserType>) {
       if (state.selectedUsers.length) {
         state.allUsers = state.allUsers.filter(
-          (user) =>
-            !state.selectedUsers.some((selectUser) => user.id === selectUser.id)
+          (user) => user.id !== action.payload.id
         );
-        state.selectedUsers = [];
+        state.selectedUsers = state.selectedUsers.filter(
+          (user) => user.id !== action.payload.id
+        );
       }
     },
   },

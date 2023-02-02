@@ -5,25 +5,32 @@ import { sortByDate } from '../../shared/libs';
 import { v1 } from 'uuid';
 import { Button, ButtonGroup } from 'react-bootstrap';
 import { useState } from 'react';
-import ModalWindow from '../modal/ModalWindow';
-import { useDispatch, useSelector } from 'react-redux';
+import ModalWindow, { ModalType } from '../modal/ModalWindow';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { usersActions } from '../../store/user.slice';
-import AutoHideToast from '../../shared/ui/AutoHideToast';
 
 const MainPage = () => {
-  const dispatch = useDispatch();
-  const [modalShow, setModalShow] = useState(false);
+  const [modalShow, setModalShow] = useState<{
+    isShow: boolean;
+    type: ModalType;
+    name: string;
+  }>({
+    isShow: false,
+    type: 'create',
+    name: '',
+  });
+
   const allUsers = useSelector<RootState, UserType[]>(
     (state) => state.users.allUsers
   );
+
   const selectedUsers = useSelector<RootState, UserType[]>(
     (state) => state.users.selectedUsers
   );
   // const sortedUsers = sortByDate(allUsers);
 
-  const onClickHandler = () => {
-    dispatch(usersActions.delUser(selectedUsers));
+  const onClickHandler = (type: ModalType, name: string) => {
+    setModalShow({ isShow: true, type, name });
   };
 
   const users = allUsers.map((user: UserType) => {
@@ -34,18 +41,29 @@ const MainPage = () => {
     <div className="main-page">
       <div className="header">
         <ButtonGroup aria-label="Basic example">
-          <Button variant="success" onClick={() => setModalShow(true)}>
+          <Button
+            variant="success"
+            onClick={() => onClickHandler('create', 'Create user')}
+          >
             Create user
           </Button>
           {!!selectedUsers.length && (
-            <Button variant="danger" onClick={onClickHandler}>
+            <Button
+              variant="danger"
+              onClick={() => onClickHandler('del', 'Del user')}
+            >
               Del user
             </Button>
           )}
         </ButtonGroup>
       </div>
       <div className="content">{users}</div>
-      <ModalWindow show={modalShow} onHide={() => setModalShow(false)} />
+      <ModalWindow
+        show={modalShow.isShow}
+        onHide={() => setModalShow({ isShow: false, type: 'create', name: '' })}
+        modalType={modalShow.type}
+        name={modalShow.name}
+      />
     </div>
   );
 };

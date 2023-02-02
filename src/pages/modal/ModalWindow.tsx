@@ -1,9 +1,14 @@
 import Modal from 'react-bootstrap/Modal';
 import CreateUserForm from '../../widgets/createUserForm/CreateUserForm';
+import UsersList from '../../widgets/usersList/UsersList';
+
+export type ModalType = 'del' | 'create';
 
 type ModalWindowPropsType = {
   show: boolean;
   onHide: () => void;
+  modalType: ModalType;
+  name: string;
 };
 
 const ModalWindow: React.FC<ModalWindowPropsType> = (props) => {
@@ -16,11 +21,14 @@ const ModalWindow: React.FC<ModalWindowPropsType> = (props) => {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Create user
+          {props.name}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <CreateUserForm closeModalWindow={props.onHide} />
+        {props.modalType === 'create' && (
+          <CreateUserForm closeModalWindow={props.onHide} />
+        )}
+        {props.modalType === 'del' && <UsersList />}
       </Modal.Body>
     </Modal>
   );
