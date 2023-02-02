@@ -1,3 +1,4 @@
+import { InitialValuesType } from './../widgets/createUserForm/CreateUserForm';
 import { UserType, users } from './users';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
@@ -27,15 +28,22 @@ export const usersSlice = createSlice({
         state.selectedUsers.push(action.payload);
       }
     },
-    createNewUser(state, action: PayloadAction<UserType>) {
-      state.allUsers.push(action.payload);
+    createNewUser(state, action: PayloadAction<InitialValuesType>) {
+      const newUser: UserType = {
+        ...action.payload,
+        id: new Date().getMilliseconds(),
+        createDate: new Date().toISOString(),
+      };
+      console.log(newUser);
+      state.allUsers.push(newUser);
     },
-    delUser(state, action: PayloadAction<UserType>) {
+    delUser(state, action: PayloadAction<UserType[]>) {
       if (state.selectedUsers.length) {
         state.allUsers = state.allUsers.filter(
           (user) =>
             !state.selectedUsers.some((selectUser) => user.id === selectUser.id)
         );
+        state.selectedUsers = [];
       }
     },
   },
